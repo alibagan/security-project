@@ -19,14 +19,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .inMemoryAuthentication()
                 .withUser("admin").password(passwordEncoder().encode("admin123")).roles("ADMIN")
                 .and()
-                .withUser("ali").password(passwordEncoder().encode("ali123")).roles("USER");
+                .withUser("ali").password(passwordEncoder().encode("ali123")).roles("USER")
+                .and()
+                .withUser("manager").password(passwordEncoder().encode("manager123")).roles("MANAGER");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .anyRequest().authenticated()
+                .antMatchers("/index.html").permitAll()
+                .antMatchers("/profile/index").authenticated()
+                .antMatchers("/admin/index").hasRole("ADMIN")
+                .antMatchers("/management/index").hasAnyRole("ADMIN", "MANAGER")
                 .and()
                 .httpBasic();
     }
