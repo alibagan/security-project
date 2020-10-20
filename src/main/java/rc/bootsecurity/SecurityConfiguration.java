@@ -34,6 +34,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/management/index").hasAnyRole("ADMIN", "MANAGER")
                 .and()
                 .httpBasic();
+
     }
 
     @Bean
